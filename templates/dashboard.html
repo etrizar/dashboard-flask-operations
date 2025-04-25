@@ -39,7 +39,10 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: 400px; /* 🔵 NUEVO: Fijamos la altura */
+            overflow: hidden; /* 🔵 NUEVO: Evitamos que crezca más */
         }
+
     </style>
 </head>
 
@@ -81,7 +84,7 @@
 
     <div class="chart-container mb-5">
         <h5 class="text-center mb-4">Historial de Ganancias/Pérdidas</h5>
-        <canvas id="graficoGanancias"></canvas>
+        <canvas id="graficoGanancias" style="width: 100%; height: 100%;"></canvas>
     </div>
 </div>
 
