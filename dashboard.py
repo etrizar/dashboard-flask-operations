@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
+
+# Configurar sesión
+app.permanent_session_lifetime = timedelta(minutes=10)  # ⏳ Cierra a los 10 minutos
 
 # Cargar variables de entorno
 load_dotenv()
@@ -15,7 +19,9 @@ def login():
     if request.method == 'POST':
         password_input = request.form.get('password')
         if password_input == PASSWORD:
+            session.permanent = True  # 🔵 Sesión permanente, sujeta a timeout
             session['authenticated'] = True
+
             return redirect(url_for('dashboard'))
         else:
             return render_template('login.html', error="❌ Contraseña incorrecta")
