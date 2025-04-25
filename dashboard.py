@@ -1,17 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import os
-from dotenv import load_dotenv
 from datetime import timedelta
-
-# Configurar sesión
-app.permanent_session_lifetime = timedelta(minutes=10)  # ⏳ Cierra a los 10 minutos
+from dotenv import load_dotenv
 
 # Cargar variables de entorno
 load_dotenv()
 
-app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')  # Importante para las sesiones
+app = Flask(__name__)   # 🔵 Primero crear la app
+
+# 🔵 Luego configurar la app
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')
+app.permanent_session_lifetime = timedelta(minutes=10)
+
 PASSWORD = os.getenv('DASHBOARD_PASSWORD', 'admin123')
 
 @app.route('/', methods=['GET', 'POST'])
