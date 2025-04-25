@@ -1,11 +1,31 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')  # Importante para las sesiones
+PASSWORD = os.getenv('DASHBOARD_PASSWORD', 'admin123')
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        password_input = request.form.get('password')
+        if password_input == PASSWORD:
+            session['authenticated'] = True
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('login.html', error="❌ Contraseña incorrecta")
+    return render_template('login.html')
+
+@app.route('/dashboard')
 def dashboard():
+    if not session.get('authenticated'):
+        return redirect(url_for('login'))
+
     try:
         archivo = 'registro_operaciones.csv'
 
@@ -34,6 +54,11 @@ def dashboard():
 
     except Exception as e:
         return f"❌ Error cargando datos: {e}"
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
